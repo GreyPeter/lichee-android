@@ -1,3 +1,6 @@
 [submodule "u-boot"]
 	path = u-boot
 	url = https://github.com/GreyPeter/u-boot-2011.09.git
+[submodule "linux-3.4"]
+	path = linux-3.4
+	url = https://github.com/GreyPeter/linux-3.4.39.git
