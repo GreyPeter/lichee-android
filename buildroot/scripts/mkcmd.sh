@@ -65,7 +65,7 @@ export LICHEE_KERN_DIR
 export LICHEE_TOOLS_DIR
 export LICHEE_UBOOT_DIR
 export LICHEE_OUT_DIR
-
+export LICHEE_HOST_PLATFORM
 # return true if used default config
 function check_br_defconf()
 {
