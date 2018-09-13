@@ -47,7 +47,16 @@ if [ ! -d ${LICHEE_BOOT_DIR} -o \
     mk_error "Please changes to that directory."
     exit 1
 fi
-
+# check host platform
+LICHEE_HOST_PLATFORM='unknown'
+unamestr=`uname`
+if [[ "$unamestr" == 'Darwin' ]]; then
+   LICHEE_HOST_PLATFORM='darwin'
+   printf "Host Platform = darwin\n"
+else
+   LICHEE_HOST_PLATFORM='linux'
+   printf "Host Platform = linux\n"
+fi
 # export importance variable
 export LICHEE_TOP_DIR
 export LICHEE_BOOT_DIR
@@ -63,7 +72,7 @@ function check_br_defconf()
     local defconf
     local outdir
     local ret=1
-    
+
     if [ ${LICHEE_PLATFORM} = "linux" ] ; then
         defconf="${LICHEE_CHIP}_${LICHEE_PLATFORM}_${LICHEE_BOARD}_defconfig"
         if [ ! -f ${LICHEE_BR_DIR}/configs/${defconf} ] ; then
@@ -211,16 +220,16 @@ function select_platform()
 {
     local cnt=0
     local choice
-    
+
     select_chip
-    
+
     printf "All available platforms:\n"
     for platdir in ${LICHEE_TOOLS_DIR}/pack/chips/${LICHEE_CHIP}/configs/* ; do
         platforms[$cnt]=`basename $platdir`
         printf "%4d. %s\n" $cnt ${platforms[$cnt]}
         ((cnt+=1))
     done
-    
+
     while true ; do
         read -p "Choice: " choice
         if [ -z "${choice}" ] ; then
@@ -243,7 +252,7 @@ function select_board()
     local choice
 
     select_platform
-    
+
     printf "All available boards:\n"
     for boarddir in ${LICHEE_TOOLS_DIR}/pack/chips/${LICHEE_CHIP}/configs/${LICHEE_PLATFORM}/* ; do
         boards[$cnt]=`basename $boarddir`
@@ -253,7 +262,7 @@ function select_board()
         printf "%4d. %s\n" $cnt ${boards[$cnt]}
         ((cnt+=1))
     done
-    
+
     while true ; do
         read -p "Choice: " choice
         if [ -z "${choice}" ] ; then
@@ -457,7 +466,7 @@ function mkboot()
 function mkrootfs()
 {
     mk_info "build rootfs ..."
-    
+
     if [ ${LICHEE_PLATFORM} = "linux" ] ; then
         make O=${LICHEE_BR_OUT} -C ${LICHEE_BR_DIR} target-generic-getty-busybox
         [ $? -ne 0 ] && mk_error "build rootfs Failed" && return 1
@@ -491,10 +500,10 @@ function mklichee()
     mksetting
 
     mk_info "build lichee ..."
-    
+
     mkbr && mkkernel && mkuboot && mkrootfs
     [ $? -ne 0 ] && return 1
-    
+
     mk_info "build lichee OK."
 }
 
@@ -548,7 +557,7 @@ function mkhelp()
     mkuboot     build u-boot
     mkrootfs    build rootfs for linux, dragonboard
     mklichee    build total lichee
-    
+
     mkclean     clean current board output
     mkdistclean clean entires output
 
@@ -559,4 +568,3 @@ function mkhelp()
 
 "
 }
-
