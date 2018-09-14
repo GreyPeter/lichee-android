@@ -52,11 +52,11 @@ LICHEE_HOST_PLATFORM='unknown'
 unamestr=`uname`
 if [[ "$unamestr" == 'Darwin' ]]; then
    LICHEE_HOST_PLATFORM='darwin'
-   printf "Host Platform = darwin\n"
 else
    LICHEE_HOST_PLATFORM='linux'
-   printf "Host Platform = linux\n"
 fi
+printf "Host Platform = $LICHEE_HOST_PLATFORM\n"
+
 # export importance variable
 export LICHEE_TOP_DIR
 export LICHEE_BOOT_DIR
